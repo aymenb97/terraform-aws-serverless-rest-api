@@ -12,3 +12,9 @@ variable "lambda_service_role_name" {
   default     = "AWSLambdaBasicExecutionRole"
 
 }
+variable "dynamo_db_table" {
+  description = "Service role name for the lambda function"
+  type        = string
+
+
+}
