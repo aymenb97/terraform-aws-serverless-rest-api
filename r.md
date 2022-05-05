@@ -1,27 +1,3 @@
-# Terraform Lambda - API Gateway v2 Rest API Module
-Terraform module that deploys an HTTP API Gateway (API Gateway V2) a lambda function in NodeJS and a test DynamoDB Table
-
-## Architecture
-![Aws Lambda, API Gateway](./architecture.png)
-
-## Features
-- Deploys an API Gateway with (GET,POST,PUT,DELETE) HTTP Methods.
-- Deploys a Lambda function in NodeJS that's triggered by API Gateway and performs operations against DynamoDB.
-- Defines a log goroup to store log messages from the lambda function for 30 days.
-- Deploys a Dynamo DB Table. 
-
-
-## Usage
-
-```shell
-$ terraform init
-```
-```shell
-$ terraform plan
-```
-```shell
-$ terraform apply
-```
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

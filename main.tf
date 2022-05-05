@@ -14,18 +14,16 @@ terraform {
   required_version = "~> 1.0"
 }
 
-
-
 resource "random_pet" "lambda_bucket_name" {
   prefix = "learn-terraform-functions"
   length = 4
 }
 
 resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = random_pet.lambda_bucket_name.id
-  //acl           = "private"
+  bucket        = random_pet.lambda_bucket_name.id
   force_destroy = true
 }
+
 data "archive_file" "lambda_rest_api" {
   type        = "zip"
   source_dir  = "${path.module}/lambda-rest"
@@ -33,11 +31,9 @@ data "archive_file" "lambda_rest_api" {
 }
 resource "aws_s3_object" "lambda_rest_api" {
   bucket = aws_s3_bucket.lambda_bucket.id
-
   key    = "lambda-rest.zip"
   source = data.archive_file.lambda_rest_api.output_path
-
-  etag = filemd5(data.archive_file.lambda_rest_api.output_path)
+  etag   = filemd5(data.archive_file.lambda_rest_api.output_path)
 }
 resource "aws_lambda_function" "lambda_rest" {
   function_name = "LambdaRest"
@@ -57,8 +53,7 @@ resource "aws_lambda_function" "lambda_rest" {
 }
 
 resource "aws_cloudwatch_log_group" "lambda_rest" {
-  name = "/aws/lambda/${aws_lambda_function.lambda_rest.function_name}"
-
+  name              = "/aws/lambda/${aws_lambda_function.lambda_rest.function_name}"
   retention_in_days = 30
 }
 data "aws_iam_role" "lambda_role" {
@@ -129,8 +124,7 @@ resource "aws_apigatewayv2_route" "delete" {
 }
 
 resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.lambda.name}"
-
+  name              = "/aws/api_gw/${aws_apigatewayv2_api.lambda.name}"
   retention_in_days = 30
 }
 
@@ -139,6 +133,5 @@ resource "aws_lambda_permission" "api_gw" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_rest.function_name
   principal     = "apigateway.amazonaws.com"
-
-  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
